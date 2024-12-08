@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+</head>
+<body>
+    <h1>Image Search</h1>
+    <form method="POST" enctype="multipart/form-data">
+        <label for="image_query">Image query:</label>
+        <input type="file" name="image_query"><br><br>
+
+        <label for="text_query">Text query:</label>
+        <input type="text" name="text_query" placeholder="e.g., snowy"><br><br>
+
+        <label for="lam">Hybrid Query Weight (λ):</label>
+        <input type="number" name="lam" step="0.1" value="0.8" min="0" max="1"><br><br>
+
+        <label for="query_type">Select query type:</label>
+        <select name="query_type">
+            <option value="Image query">Image query</option>
+            <option value="Text query">Text query</option>
+            <option value="Hybrid query">Hybrid query</option>
+        </select><br><br>
+        <label for="use_pca">Use PCA-reduced embeddings:</label>
+        <input type="checkbox" name="use_pca" value="true"><br><br>
+
+        <label for="pca_components">Number of PCA components (k):</label>
+        <input type="number" name="pca_components" value="50" min="1"><br><br>
+
+
+        <button type="submit">Search</button>
+    </form>
+
+    {% if top_similar_images %}
+        <h2>Top 5 Search Results</h2>
+        <ol>
+        {% for image_path, similarity in top_similar_images %}
+            <li>
+                <p>Similarity: {{ similarity }}</p>
+                <img src="{{ image_path }}" alt="Similar image" style="max-width: 200px;">
+            </li>
+        {% endfor %}
+        </ol>
+    {% elif error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
